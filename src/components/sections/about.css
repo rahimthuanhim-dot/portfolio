@@ -1,0 +1,65 @@
+.about {
+  display: grid;
+  width: min(100% - (var(--page-gutter) * 2), var(--content-width));
+  grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
+  align-items: start;
+  gap: clamp(var(--space-6), 8vw, var(--space-8));
+  margin-inline: auto;
+  padding-block: clamp(var(--space-8), 12vw, 9rem);
+  scroll-margin-top: var(--space-6);
+}
+
+.about__content {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-4);
+}
+
+.about__content h2 {
+  max-width: 18ch;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  text-wrap: balance;
+}
+
+.about__nickname {
+  color: var(--color-accent);
+}
+
+.about__intro {
+  max-width: 39rem;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  text-wrap: pretty;
+}
+
+.about__skills {
+  display: grid;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}
+
+.about__skills-title {
+  color: var(--color-text);
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+}
+
+.about__skills-description {
+  font-size: 0.95rem;
+}
+
+.about__skill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (max-width: 44rem) {
+  .about {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-6);
+    padding-block: var(--space-8);
+  }
+}
