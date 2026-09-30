@@ -26,8 +26,8 @@
   inset: 0;
   background: radial-gradient(
     ellipse at center,
-    transparent 36%,
-    rgb(16 19 23 / 42%) 100%
+    transparent 42%,
+    rgb(16 19 23 / 22%) 100%
   );
   content: "";
   pointer-events: none;
