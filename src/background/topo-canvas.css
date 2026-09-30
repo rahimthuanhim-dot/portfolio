@@ -19,8 +19,32 @@
   );
 }
 
+.topo-canvas::after,
+.topo-fallback::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 36%,
+    rgb(16 19 23 / 42%) 100%
+  );
+  content: "";
+  pointer-events: none;
+}
+
 .topo-canvas {
-  opacity: 0.38;
+  opacity: 0;
+  transition: opacity 600ms ease-out;
+}
+
+.topo-canvas--ready {
+  opacity: 1;
+}
+
+.topo-canvas[data-reduced-motion] {
+  opacity: 1;
+  transition: none;
 }
 
 .topo-canvas canvas {
@@ -51,6 +75,6 @@
 
 @media (max-width: 48rem) {
   .topo-canvas {
-    opacity: 0.3;
+    transition: opacity 600ms ease-out;
   }
 }

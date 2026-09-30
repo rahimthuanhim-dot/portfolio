@@ -1,4 +1,5 @@
 import { GlassPanel } from '../ui/GlassPanel';
+import { useInView } from '../../hooks/useInView';
 import './contact.css';
 
 const contactMethods = [
@@ -35,11 +36,14 @@ const contactMethods = [
 ];
 
 export function Contact() {
+  const { ref, inView } = useInView<HTMLElement>({ once: true, threshold: 0.1 });
+
   return (
     <section
-      className="contact"
+      className={`contact section-reveal${inView ? ' section-reveal--visible' : ''}`}
       id="contact"
       aria-labelledby="contact-title"
+      ref={ref}
     >
       <header className="contact__header">
         <p className="eyebrow">Get in touch</p>

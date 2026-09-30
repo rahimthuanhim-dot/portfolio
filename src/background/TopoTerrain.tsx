@@ -4,41 +4,54 @@ import type { BufferGeometry } from 'three';
 import { useMouseUniform } from './useMouseUniform';
 import vertexShader from './shaders/terrain.vert.glsl?raw';
 import fragmentShader from './shaders/terrain.frag.glsl?raw';
-import type { QualityTier } from './useQualityTier';
-
 type TopoTerrainProps = {
-  tier: QualityTier;
+  isMobile: boolean;
+  reduceSegments: boolean;
+  lineOpacity: { current: number };
+  animate: boolean;
+  onFirstFrame: () => void;
 };
 
-const segmentsByTier = {
-  low: [42, 34],
-  medium: [64, 48],
-  high: [92, 68],
-} satisfies Record<QualityTier, [number, number]>;
-
-export function TopoTerrain({ tier }: TopoTerrainProps) {
-  const pointer = useMouseUniform();
+export function TopoTerrain({
+  isMobile,
+  reduceSegments,
+  lineOpacity,
+  animate,
+  onFirstFrame,
+}: TopoTerrainProps) {
+  const pointer = useMouseUniform(animate && !isMobile);
   const elapsedTime = useRef(0);
+  const didNotifyFirstFrame = useRef(false);
   const geometryRef = useRef<BufferGeometry>(null);
+  const [widthSegments, heightSegments] =
+    isMobile || reduceSegments ? [64, 64] : [128, 128];
   const uniforms = useMemo(
-    () => ({ uOpacity: { value: 0.38 } }),
+    () => ({ uLineOpacity: { value: 0.3 } }),
     [],
   );
 
   useFrame((_, delta) => {
+    if (!didNotifyFirstFrame.current) {
+      didNotifyFirstFrame.current = true;
+      onFirstFrame();
+    }
+
     const pointerState = pointer.current;
-    elapsedTime.current += delta;
-    pointerState.current.lerp(pointerState.target, 1 - Math.exp(-delta * 3.5));
-    pointerState.active +=
-      (pointerState.targetActive - pointerState.active) *
-      (1 - Math.exp(-delta * 3.5));
+    uniforms.uLineOpacity.value = lineOpacity.current;
+    if (animate) {
+      elapsedTime.current += delta;
+      pointerState.current.lerp(pointerState.target, 1 - Math.exp(-delta * 3.5));
+      pointerState.active +=
+        (pointerState.targetActive - pointerState.active) *
+        (1 - Math.exp(-delta * 3.5));
+    }
 
     const position = geometryRef.current?.getAttribute('position');
     if (!position) {
       return;
     }
 
-    const time = elapsedTime.current * 1.15;
+    const time = animate ? elapsedTime.current * 1.15 : 0;
     const pointerX = (pointerState.current.x - 0.5) * 36;
     const pointerY = (pointerState.current.y - 0.5) * 30;
 
@@ -49,19 +62,18 @@ export function TopoTerrain({ tier }: TopoTerrainProps) {
       const crossingWave = Math.cos(y * 0.51 - time * 0.8) * 0.3;
       const diagonalWave = Math.sin((x + y) * 0.31 + time * 0.6) * 0.18;
       const pointerDistance = Math.hypot(x - pointerX, y - pointerY);
-      const ripple =
-        Math.sin(pointerDistance * 2.4 - elapsedTime.current * 1.8) *
-        Math.exp(-pointerDistance * 0.48) *
-        pointerState.active *
-        0.16;
+      const ripple = animate
+        ? Math.sin(pointerDistance * 2.4 - elapsedTime.current * 1.8) *
+          Math.exp(-pointerDistance * 0.48) *
+          pointerState.active *
+          0.16
+        : 0;
 
       position.setZ(index, broadWave + crossingWave + diagonalWave + ripple);
     }
 
     position.needsUpdate = true;
   });
-
-  const [widthSegments, heightSegments] = segmentsByTier[tier];
 
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.7, 0]}>

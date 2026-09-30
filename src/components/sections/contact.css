@@ -1,26 +1,48 @@
 .contact {
+  position: relative;
+  isolation: isolate;
   display: grid;
   width: min(100% - (var(--page-gutter) * 2), var(--content-width));
-  gap: var(--space-6);
+  gap: var(--space-5);
   margin-inline: auto;
-  padding-block: clamp(var(--space-8), 10vw, 7rem) var(--space-8);
+  padding-block: var(--section-padding-desktop);
   scroll-margin-top: var(--space-6);
+}
+
+@media (max-width: 48rem) {
+  .contact {
+    padding-block: var(--section-padding-mobile);
+  }
+}
+
+.contact::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0 calc(var(--page-gutter) * -1);
+  background: linear-gradient(
+    105deg,
+    rgb(16 19 23 / 75%) 0%,
+    rgb(16 19 23 / 45%) 48%,
+    transparent 88%
+  );
+  content: "";
+  pointer-events: none;
 }
 
 .contact__header {
   display: grid;
-  max-width: 40rem;
+  max-width: 60ch;
   justify-items: start;
-  gap: var(--space-3);
+  gap: var(--space-5);
 }
 
 .contact__header h2 {
-  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-size: clamp(var(--font-size-28), 4vw, var(--font-size-40));
 }
 
 .contact__intro {
-  max-width: 36rem;
-  font-size: 1.05rem;
+  max-width: 58ch;
+  font-size: var(--font-size-16);
 }
 
 .contact__grid {
@@ -35,13 +57,14 @@
   align-content: start;
   gap: var(--space-2);
   border-radius: var(--radius-md);
-  padding: 1.125rem 1.25rem;
+  padding: var(--space-3) var(--space-4);
 }
 
 .contact__label {
   color: var(--color-text-muted);
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-body);
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -50,11 +73,12 @@
   display: inline-flex;
   width: fit-content;
   max-width: 100%;
-  align-items: baseline;
+  min-height: var(--tap-target);
+  align-items: center;
   gap: var(--space-2);
   overflow-wrap: anywhere;
   color: var(--color-text);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 
 .contact__link:hover {
@@ -67,12 +91,6 @@
 }
 
 @media (max-width: 48rem) {
-  .contact__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 34rem) {
   .contact__grid {
     grid-template-columns: minmax(0, 1fr);
   }

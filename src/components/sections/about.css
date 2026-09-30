@@ -1,23 +1,39 @@
 .about {
+  position: relative;
+  isolation: isolate;
   display: grid;
   width: min(100% - (var(--page-gutter) * 2), var(--content-width));
-  grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   align-items: start;
-  gap: clamp(var(--space-6), 8vw, var(--space-8));
+  gap: var(--space-6);
   margin-inline: auto;
-  padding-block: clamp(var(--space-8), 12vw, 9rem);
+  padding-block: var(--section-padding-desktop);
   scroll-margin-top: var(--space-6);
+}
+
+.about::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0 calc(var(--page-gutter) * -1);
+  background: linear-gradient(
+    105deg,
+    rgb(16 19 23 / 75%) 0%,
+    rgb(16 19 23 / 45%) 48%,
+    transparent 88%
+  );
+  content: "";
+  pointer-events: none;
 }
 
 .about__content {
   display: grid;
   justify-items: start;
-  gap: var(--space-4);
+  gap: var(--space-5);
 }
 
 .about__content h2 {
   max-width: 18ch;
-  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-size: clamp(var(--font-size-28), 4vw, var(--font-size-40));
   text-wrap: balance;
 }
 
@@ -26,8 +42,9 @@
 }
 
 .about__intro {
-  max-width: 39rem;
-  font-size: clamp(1rem, 2vw, 1.15rem);
+  max-width: 60ch;
+  font-size: clamp(var(--font-size-16), 2vw, var(--font-size-20));
+  line-height: var(--line-height-body);
   text-wrap: pretty;
 }
 
@@ -39,12 +56,15 @@
 
 .about__skills-title {
   color: var(--color-text);
-  font-size: 1.1rem;
+  font-size: var(--font-size-20);
+  line-height: var(--line-height-heading);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: -0.02em;
 }
 
 .about__skills-description {
-  font-size: 0.95rem;
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-body);
 }
 
 .about__skill-list {
@@ -56,10 +76,10 @@
   list-style: none;
 }
 
-@media (max-width: 44rem) {
+@media (max-width: 48rem) {
   .about {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-6);
-    padding-block: var(--space-8);
+    gap: var(--space-5);
+    padding-block: var(--section-padding-mobile);
   }
 }

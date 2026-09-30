@@ -1,4 +1,5 @@
 import { Tag } from '../ui/Tag';
+import { useInView } from '../../hooks/useInView';
 import './about.css';
 
 const areasOfExperience = [
@@ -11,9 +12,18 @@ const areasOfExperience = [
   'SQL / DBMS',
 ];
 
+const languages = ['English', 'Hindi', 'Spanish (basic)'];
+
 export function About() {
+  const { ref, inView } = useInView<HTMLElement>({ once: true, threshold: 0.1 });
+
   return (
-    <section className="about" id="about" aria-labelledby="about-title">
+    <section
+      aria-labelledby="about-title"
+      className={`about section-reveal${inView ? ' section-reveal--visible' : ''}`}
+      id="about"
+      ref={ref}
+    >
       <div className="about__content">
         <p className="eyebrow">A little about me</p>
         <h2 id="about-title">
@@ -35,6 +45,14 @@ export function About() {
           {areasOfExperience.map((area) => (
             <li key={area}>
               <Tag>{area}</Tag>
+            </li>
+          ))}
+        </ul>
+        <h3 className="about__skills-title">Languages</h3>
+        <ul className="about__skill-list" aria-label="Languages">
+          {languages.map((language) => (
+            <li key={language}>
+              <Tag>{language}</Tag>
             </li>
           ))}
         </ul>

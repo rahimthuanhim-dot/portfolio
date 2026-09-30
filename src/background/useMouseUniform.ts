@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Vector2 } from 'three';
 
-export function useMouseUniform() {
+export function useMouseUniform(enabled = true) {
   const pointer = useRef({
     current: new Vector2(-2, -2),
     target: new Vector2(-2, -2),
@@ -10,6 +10,10 @@ export function useMouseUniform() {
   });
 
   useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
     const desktopPointer = window.matchMedia(
       '(hover: hover) and (pointer: fine)',
     );
@@ -42,7 +46,7 @@ export function useMouseUniform() {
       window.removeEventListener('blur', clearPointer);
       document.removeEventListener('pointerleave', clearPointer);
     };
-  }, []);
+  }, [enabled]);
 
   return pointer;
 }

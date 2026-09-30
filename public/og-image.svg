@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#101317"/>
+  <path d="M0 470 1200 210M0 520 1200 260M0 570 1200 310" stroke="#b7d8d1" stroke-opacity=".12" stroke-width="2"/>
+  <rect x="84" y="82" width="1032" height="466" rx="28" fill="#171c22" fill-opacity=".86" stroke="#e2ebf5" stroke-opacity=".14"/>
+  <text x="140" y="255" fill="#d1ebe4" font-family="Arial, sans-serif" font-size="28" font-weight="600">RAHIMTHUAN PHAOMEI</text>
+  <text x="140" y="355" fill="#f1f3f5" font-family="Arial, sans-serif" font-size="60" font-weight="700">AIML Student</text>
+  <text x="140" y="425" fill="#f1f3f5" font-family="Arial, sans-serif" font-size="48" font-weight="600">Freelance Web Developer</text>
+  <text x="140" y="490" fill="#a0aab5" font-family="Arial, sans-serif" font-size="26">Building functional websites for businesses</text>
+</svg>

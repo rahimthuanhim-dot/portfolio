@@ -9,7 +9,9 @@ export function useInView<T extends Element = HTMLElement>(
 ) {
   const { once = false, root, rootMargin, threshold } = options;
   const ref = useRef<T>(null);
-  const [inView, setInView] = useState(false);
+  const [inView, setInView] = useState(
+    () => typeof document !== 'undefined' && document.visibilityState === 'hidden',
+  );
 
   useEffect(() => {
     const element = ref.current;
@@ -17,18 +19,36 @@ export function useInView<T extends Element = HTMLElement>(
       return;
     }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setInView(entry.isIntersecting);
-        if (once && entry.isIntersecting) {
-          observer.unobserve(element);
-        }
-      },
-      { root, rootMargin, threshold },
-    );
+    let observer: IntersectionObserver | undefined;
+    if ('IntersectionObserver' in window) {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          setInView(entry.isIntersecting);
+          if (once && entry.isIntersecting) {
+            observer?.unobserve(element);
+          }
+        },
+        { root, rootMargin, threshold },
+      );
+      observer.observe(element);
+    }
 
-    observer.observe(element);
-    return () => observer.disconnect();
+    const checkVisibility = () => {
+      const bounds = element.getBoundingClientRect();
+      const visible = bounds.bottom > 0 && bounds.top < window.innerHeight;
+      if (visible || !once) {
+        setInView(visible);
+      }
+    };
+    checkVisibility();
+    window.addEventListener('scroll', checkVisibility, { passive: true });
+    window.addEventListener('resize', checkVisibility);
+
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener('scroll', checkVisibility);
+      window.removeEventListener('resize', checkVisibility);
+    };
   }, [inView, once, root, rootMargin, threshold]);
 
   return { ref, inView };
